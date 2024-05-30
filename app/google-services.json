@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "1069746935737",
+    "firebase_url": "https://fir-demoapp-4c3bc-default-rtdb.firebaseio.com",
+    "project_id": "fir-demoapp-4c3bc",
+    "storage_bucket": "fir-demoapp-4c3bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069746935737:android:86af24ffa5549a3045c868",
+        "android_client_info": {
+          "package_name": "com.dentonstudio.christosangeet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD16BoWcJg17iLl2YsVrHiywjkAKDoUO18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069746935737:android:662bbc5b3968379545c868",
+        "android_client_info": {
+          "package_name": "com.example.firebasedemoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD16BoWcJg17iLl2YsVrHiywjkAKDoUO18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069746935737:android:83097a1aa808a92045c868",
+        "android_client_info": {
+          "package_name": "com.example.navbar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD16BoWcJg17iLl2YsVrHiywjkAKDoUO18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
