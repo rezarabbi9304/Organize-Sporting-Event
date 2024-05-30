@@ -24,8 +24,8 @@ sealed class ScreenRoute(
     )
 
     object Job: ScreenRoute(
-        route = "Job",
-        title = "job",
+        route = "Player",
+        title = "Player",
         ImageVector =  Icons.Rounded.AccountCircle
     )
 

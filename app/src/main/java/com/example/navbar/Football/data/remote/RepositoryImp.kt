@@ -52,7 +52,7 @@ class RepositoryImp(
         emit(Resource.Loading())
         try {
             val data  = db.collection("Player")
-                .whereEqualTo("TeamId","01")
+                .whereEqualTo("TeamId","0${teamId}")
                 .get()
                 .await().documents.map {
                     Player(
@@ -61,7 +61,7 @@ class RepositoryImp(
                     )
                 }
 
-
+            emit(Resource.Success(data))
 
 
 

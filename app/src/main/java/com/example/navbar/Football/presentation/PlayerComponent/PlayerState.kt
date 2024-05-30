@@ -1,6 +1,8 @@
 package com.example.navbar.Football.presentation.PlayerComponent
 
+import com.example.navbar.Football.domain.model.Player
+
 data class PlayerState(
-    val Name:String,
-    val TeamId:String
-)
+    val player:List<Player> = emptyList(),
+
+    )

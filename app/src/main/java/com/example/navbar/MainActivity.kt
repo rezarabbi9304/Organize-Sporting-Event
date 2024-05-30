@@ -33,9 +33,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.navbar.Screen.AddScreen
 import com.example.navbar.Screen.HomeScreen
 import com.example.navbar.Screen.JobScreen
@@ -116,10 +118,21 @@ class MainActivity : ComponentActivity() {
                             NavHost(  modifier = Modifier.padding(paddingValues),navController = navController, startDestination = ScreenRoute.Home.route){
 
                                 composable(route = ScreenRoute.Home.route){
-                                    HomeScreen(true)
+                                    HomeScreen(true, navController = navController)
                                 }
-                                composable(route = ScreenRoute.Job.route){
-                                    JobScreen()
+                                composable(route = ScreenRoute.Job.route+ "?TeamId={TeamId}",
+                                    arguments = listOf(
+                                        navArgument(
+                                            name = "TeamId",
+                                        ){
+                                            type = NavType.IntType
+                                            defaultValue = -1
+                                        }
+                                    )
+                                ){
+                                    JobScreen(
+                                        navController = navController
+                                    )
                                 }
                                 composable(route = ScreenRoute.AddNew.route){
                                     AddScreen()

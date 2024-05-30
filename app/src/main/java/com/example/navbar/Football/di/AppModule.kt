@@ -2,6 +2,7 @@ package com.example.navbar.Football.di
 
 import com.example.navbar.Football.data.remote.RepositoryImp
 import com.example.navbar.Football.domain.repository.footballRepository
+import com.example.navbar.Football.domain.useCase.GetPlayer
 import com.example.navbar.Football.domain.useCase.GetTeam
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +32,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideUseCase(repo:footballRepository):GetTeam{
+    fun provideUseCaseGetTeam(repo:footballRepository):GetTeam{
         return GetTeam(repo)
     }
+    @Provides
+    @Singleton
+    fun provideUseCaseGetPlayer(repo:footballRepository):GetPlayer{
+        return GetPlayer(repo)
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.navbar.Screen
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.navbar.Football.presentation.FootballViewModel
 import com.google.firebase.Firebase
@@ -27,6 +29,7 @@ import com.google.firebase.firestore.firestore
 
 @Composable
 fun HomeScreen(isTrue:Boolean,
+               navController: NavController,
                viewModel: FootballViewModel = hiltViewModel()) {
 
     var horizon  = Alignment.CenterHorizontally
@@ -63,7 +66,10 @@ fun HomeScreen(isTrue:Boolean,
 
 
         for(team in viewModel.state.value.teams){
-            Column (
+            Column(
+                modifier = Modifier.clickable {
+                    navController.navigate(ScreenRoute.Job.route+"?TeamId=${team.TeamId}")
+                },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
