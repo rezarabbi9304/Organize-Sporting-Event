@@ -30,11 +30,16 @@ class FootballViewModel @Inject constructor(
             useCase.invoke().onEach {
                 when(it){
                     is Resource.Error -> {}
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        _state.value = state.value.copy(
+                            loading = true
+                        )
+                    }
                     is Resource.Success -> {
                         _state.value = it.data?.let { it1 ->
                             state.value.copy(
-                                teams = it1
+                                teams = it1,
+                                loading = false
                             )
                         }!!
                     }

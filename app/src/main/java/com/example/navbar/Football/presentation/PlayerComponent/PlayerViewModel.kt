@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide.init
 import com.dentonstudio.rickandmorty.util.Resource
+import com.example.navbar.Football.di.AppModule_ProvideUseCaseGetTeamFactory
 import com.example.navbar.Football.domain.useCase.GetPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -22,6 +23,8 @@ class PlayerViewModel @Inject constructor(
 
     private val _playerState = mutableStateOf(PlayerState())
     val playerState = _playerState
+    private val _TeamPoster = mutableStateOf("")
+    val TeamPoster =_TeamPoster
 
 
     init {
@@ -29,6 +32,10 @@ class PlayerViewModel @Inject constructor(
             if(it!=-1){
                 getAllPlayer(it.toString())
             }
+        }
+
+        savedStateHandle.get<String>("poster")?.let {
+            _TeamPoster.value = it
         }
     }
 
@@ -38,12 +45,17 @@ class PlayerViewModel @Inject constructor(
             useCase.invoke(teamId).onEach {
                 when(it){
                     is Resource.Error -> {}
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        _playerState.value=  playerState.value.copy(
+                            loading = true
+                        )
+                    }
 
                     is Resource.Success -> {
 
                         _playerState.value = playerState.value.copy(
-                            player = it.data!!
+                            player = it.data!!,
+                            loading = false
                         )
                     }
                 }

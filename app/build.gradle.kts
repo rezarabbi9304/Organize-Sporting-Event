@@ -78,5 +78,6 @@ dependencies {
     implementation("com.github.skydoves:landscapist-glide:1.3.7")
     implementation("com.google.dagger:hilt-android:2.49")
     kapt("com.google.dagger:hilt-compiler:2.48")
+    implementation("com.github.skydoves:landscapist-glide:1.3.7")
     
 }

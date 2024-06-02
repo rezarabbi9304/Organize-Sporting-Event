@@ -32,6 +32,6 @@ sealed class ScreenRoute(
     object AddNew: ScreenRoute(
         route = "AddNew",
         title = "add",
-        ImageVector =  Icons.Rounded.Favorite
+        ImageVector =  Icons.Rounded.AccountCircle
     )
 }

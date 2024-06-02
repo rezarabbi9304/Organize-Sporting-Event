@@ -34,7 +34,7 @@ fun GifScreen() {
             DisposableEffect(context) {
                 Glide.with(context)
                     .asGif()
-                    .load("https://imager-prod.onquidd.com/quidds/48548-img-l-1532975350.gif")
+                    .load("https://firebasestorage.googleapis.com/v0/b/fir-demoapp-4c3bc.appspot.com/o/football-11622_512.gif?alt=media&token=32a55984-d563-43db-bc50-0754a8d42ff0")
                     .into(view)
                 onDispose {
                     // Cleanup when the composable is disposed
@@ -42,8 +42,10 @@ fun GifScreen() {
                 }
             }
 
+
             // Wrap the ImageView with Compose's View composable
             AndroidView(factory = { view })
+
         }
 
 

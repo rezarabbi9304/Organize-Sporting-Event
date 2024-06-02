@@ -23,7 +23,6 @@ import com.example.navbar.Screen.ScreenRoute
 ) {
     val screen = listOf(
         ScreenRoute.Home,
-        ScreenRoute.Job,
         ScreenRoute.AddNew,
 
         )

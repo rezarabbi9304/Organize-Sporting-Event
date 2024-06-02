@@ -39,7 +39,7 @@ fun MenuItem(
 
 
         Icon(modifier = Modifier.fillMaxHeight()
-            .aspectRatio(.7f), imageVector = menu.ImageVector, contentDescription =menu.title , tint = MaterialTheme.colorScheme.primary )
+            .aspectRatio(.7f), imageVector = menu.ImageVector, contentDescription =menu.title , tint = Color.White )
 
 
 

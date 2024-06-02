@@ -4,5 +4,6 @@ import com.example.navbar.Football.domain.model.Team
 
 data class TeamState (
     val teams: List<Team> = emptyList(),
+    val loading:Boolean =false
 
 )

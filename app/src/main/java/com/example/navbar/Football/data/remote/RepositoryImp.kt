@@ -57,13 +57,13 @@ class RepositoryImp(
                 .await().documents.map {
                     Player(
                         TeamId = it.getString("TeamId")?:"-1",
-                        Name = it.getString("Name")?:"Unknown"
+                        Name = it.getString("Name")?:"Unknown",
+                        Resposibility = it.getString("Responsibility"),
+                        Position = it.getString("Position")
                     )
                 }
 
             emit(Resource.Success(data))
-
-
 
         }catch (Ex:HttpException){
             emit(Resource.Error(
