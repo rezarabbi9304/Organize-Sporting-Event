@@ -30,7 +30,7 @@ import com.example.navbar.R
 @Composable
 fun AccountingScreen(
     viewModel: PlayerViewModel = hiltViewModel(),
-     useCase: WrapperCaseClass
+
 ) {
 
 

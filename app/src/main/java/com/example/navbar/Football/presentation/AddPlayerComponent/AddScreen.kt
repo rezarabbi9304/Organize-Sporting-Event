@@ -103,7 +103,7 @@ fun AddScreen(
                     value = viewModel.addPlayer.value.Paymnet,
                     onValueChange = { viewModel.eventListener(InputEvent.EnterPayment(it)) },
                     label = { Text(text = "Payment") })
-                viewModel.addPlayer.value.TeamIdError?.let {
+                viewModel.addPlayer.value.PaymnetError?.let {
                     Text(
                         text = it,
                         style = TextStyle(color = Color.White)
@@ -112,8 +112,10 @@ fun AddScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = { viewModel.eventListener(InputEvent.addEvent) }, modifier = Modifier
+
                         .height(50.dp)
-                        .fillMaxWidth(.5f)
+                        .fillMaxWidth(.5f),
+
                 ) {
                     Text(text = "Add Player")
                 }

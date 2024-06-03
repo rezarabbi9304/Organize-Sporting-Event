@@ -74,7 +74,7 @@ class AddPlayerViewModel @Inject constructor(
                 NameError = "Cant leave empty",
                 PositionError = "Cant leave empty",
                 TeamIdError = "Cant leave empty",
-                Paymnet = "Enter Amount"
+                PaymnetError = "Enter Amount"
             )
             return
         } else {
