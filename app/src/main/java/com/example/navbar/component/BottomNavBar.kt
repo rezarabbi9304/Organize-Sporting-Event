@@ -24,6 +24,7 @@ import com.example.navbar.Screen.ScreenRoute
     val screen = listOf(
         ScreenRoute.Home,
         ScreenRoute.AddNew,
+        ScreenRoute.Account
 
         )
 

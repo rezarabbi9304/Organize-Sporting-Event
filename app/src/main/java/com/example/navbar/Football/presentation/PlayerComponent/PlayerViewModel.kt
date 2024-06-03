@@ -7,8 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide.init
 import com.dentonstudio.rickandmorty.util.Resource
-import com.example.navbar.Football.di.AppModule_ProvideUseCaseGetTeamFactory
+
 import com.example.navbar.Football.domain.useCase.GetPlayer
+import com.example.navbar.Football.domain.useCase.WrapperCaseClass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
-   val useCase:GetPlayer,
+    val  useCase: WrapperCaseClass,
     savedStateHandle: SavedStateHandle,
 ):ViewModel() {
 
@@ -42,7 +43,7 @@ class PlayerViewModel @Inject constructor(
     fun getAllPlayer(teamId: String) {
 
         viewModelScope.launch {
-            useCase.invoke(teamId).onEach {
+            useCase.getPlayer.invoke(teamId).onEach {
                 when(it){
                     is Resource.Error -> {}
                     is Resource.Loading -> {

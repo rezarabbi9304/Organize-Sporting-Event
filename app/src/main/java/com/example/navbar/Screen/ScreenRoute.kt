@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.AddCircle
+import androidx.compose.material.icons.rounded.Calculate
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,5 +34,11 @@ sealed class ScreenRoute(
         route = "AddNew",
         title = "add",
         ImageVector =  Icons.Rounded.AccountCircle
+    )
+
+    object Account: ScreenRoute(
+        route = "Account",
+        title = "accounting",
+        ImageVector =  Icons.Rounded.Calculate
     )
 }

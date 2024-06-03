@@ -8,5 +8,9 @@ data class AddPlayerState(
     val NameError:String?=null,
     val Resposibility:String? = null,
     val Position:String? = null,
-    val PositionError:String =""
+    val PositionError:String? =null,
+    val Loading:Boolean = false,
+    val Paymnet: String = "",
+    val PaymnetError: String?= null
 )
+

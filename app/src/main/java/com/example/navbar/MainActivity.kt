@@ -1,6 +1,11 @@
 package com.example.navbar
 
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -26,12 +31,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.navbar.Football.presentation.AccountingComponent.AccountingScreen
 import com.example.navbar.Football.presentation.AddPlayerComponent.AddScreen
 import com.example.navbar.Screen.HomeScreen
 import com.example.navbar.Football.presentation.PlayerComponent.PlayerScreen
@@ -39,13 +46,16 @@ import com.example.navbar.Screen.ScreenRoute
 import com.example.navbar.component.BottomNavBar
 import com.example.navbar.ui.theme.NavBarTheme
 import dagger.hilt.android.AndroidEntryPoint
+
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val activity = this as Activity
         setContent {
             NavBarTheme {
                 val navController = rememberNavController()
@@ -110,7 +120,8 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         ) { paddingValues ->
-                            NavHost(  modifier = Modifier,navController = navController, startDestination = ScreenRoute.Home.route){
+                            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                            NavHost(  modifier = Modifier.padding(paddingValues),navController = navController, startDestination = ScreenRoute.Home.route){
 
                                 composable(route = ScreenRoute.Home.route){
                                     HomeScreen(true, navController = navController)
@@ -138,6 +149,10 @@ class MainActivity : ComponentActivity() {
                                 composable(route = ScreenRoute.AddNew.route){
                                     AddScreen()
                                 }
+
+                                composable(route = ScreenRoute.Account.route){
+                                    AccountingScreen()
+                                }
                             }
                         }
                     }
@@ -147,6 +162,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
+
+
+
+
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

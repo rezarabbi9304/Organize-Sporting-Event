@@ -9,4 +9,6 @@ interface footballRepository {
 
     suspend fun getTeam():Flow<Resource<List<Team>>>
     suspend fun getPlayer(teamId:String):Flow<Resource<List<Player>>>
+
+    suspend fun addPlayer(player: Player):Flow<Resource<String>>
 }

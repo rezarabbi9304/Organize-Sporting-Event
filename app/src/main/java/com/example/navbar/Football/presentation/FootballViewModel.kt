@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.dentonstudio.rickandmorty.util.Resource
 import com.example.navbar.Football.domain.model.Team
 import com.example.navbar.Football.domain.useCase.GetTeam
+import com.example.navbar.Football.domain.useCase.WrapperCaseClass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FootballViewModel @Inject constructor(
-  val  useCase:GetTeam
+  val  useCase:WrapperCaseClass
 ) :ViewModel() {
 
     private val _state = mutableStateOf(TeamState())
@@ -27,7 +28,7 @@ class FootballViewModel @Inject constructor(
 
     fun getTeam(){
         viewModelScope.launch {
-            useCase.invoke().onEach {
+            useCase.getTeam.invoke().onEach {
                 when(it){
                     is Resource.Error -> {}
                     is Resource.Loading -> {

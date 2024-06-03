@@ -59,7 +59,8 @@ class RepositoryImp(
                         TeamId = it.getString("TeamId")?:"-1",
                         Name = it.getString("Name")?:"Unknown",
                         Resposibility = it.getString("Responsibility"),
-                        Position = it.getString("Position")
+                        Position = it.getString("Position"),
+                        Payment = it.getString("Payment")
                     )
                 }
 
@@ -75,5 +76,37 @@ class RepositoryImp(
                 message = "No Internet Connection"
             ))
         }
+    }
+
+    override suspend fun addPlayer(player: Player): Flow<Resource<String>> = flow{
+        emit(Resource.Loading())
+
+        try {
+            val docData = hashMapOf(
+                "Name" to player.Name,
+                "Position" to player.Position,
+                "TeamId" to player.TeamId,
+                "Resposibility" to player.Resposibility,
+                "Payment" to player.Payment
+
+            )
+
+
+            val data = db.collection("Player")
+                .document().set(
+                    docData
+                )
+            emit(Resource.Success("Player Add Complete"))
+        }catch (ex:HttpException){
+            emit(Resource.Error(
+                message = "Something Went Wrong"
+            ))
+        }catch (Ex:IOException){
+            emit(Resource.Error(
+                message = "Something Went Wrong"
+            ))
+        }
+
+
     }
 }
