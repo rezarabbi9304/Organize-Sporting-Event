@@ -6,15 +6,11 @@ import com.example.navbar.Football.domain.model.Team
 import com.example.navbar.Football.domain.repository.footballRepository
 import kotlinx.coroutines.flow.Flow
 
-class GetPlayer(
+class UpdatePlayer(
     val repo:footballRepository
 ) {
 
-    suspend fun invoke(teamId:String):Flow<Resource<List<Player>>>{
-        return repo.getPlayer(teamId)
-    }
-
-    suspend fun invokeAll():Flow<Resource<List<Player>>>{
-        return repo.getAllPlayer()
+    suspend fun invoke(player: Player):Flow<Resource<String>>{
+        return repo.update(player)
     }
 }

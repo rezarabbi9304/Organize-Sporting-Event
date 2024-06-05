@@ -1,6 +1,5 @@
 package com.example.navbar.Football.presentation.AddPlayerComponent
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +7,8 @@ import com.dentonstudio.rickandmorty.util.Resource
 import com.example.navbar.Football.domain.model.Player
 import com.example.navbar.Football.domain.useCase.WrapperCaseClass
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -21,6 +22,24 @@ class AddPlayerViewModel @Inject constructor(
 
     private val _addPlayer = mutableStateOf(AddPlayerState())
     val addPlayer = _addPlayer
+
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
+
+    fun updatePlayerData(player:Player){
+        _addPlayer.value = addPlayer.value.copy(
+            Name = player.Name,
+            Position = player.Position,
+            TeamId = player.TeamId,
+            Paymnet = player.Payment?:"0",
+            DocumentId = player.DocId
+
+
+        )
+    }
+
+
 
 
     fun eventListener(event: InputEvent) {
@@ -54,7 +73,51 @@ class AddPlayerViewModel @Inject constructor(
                     Paymnet = event.value
                 )
             }
+
+            InputEvent.updateEvent ->{
+                update()
+            }
         }
+    }
+
+    fun update(){
+
+        viewModelScope.launch {
+
+            useCaseClass.updatePlayer.invoke(
+                Player(
+                    TeamId = _addPlayer.value.TeamId,
+                    Position = _addPlayer.value.Position,
+                    Name = _addPlayer.value.Name,
+                    Resposibility = "",
+                    Payment =  _addPlayer.value.Paymnet,
+                    DocId = _addPlayer.value.DocumentId
+
+                )
+            ).onEach {
+                when(it){
+                    is Resource.Error ->{}
+                    is Resource.Loading ->{
+                        _addPlayer.value = addPlayer.value.copy(
+                            Loading = true
+                        )
+                    }
+                    is Resource.Success -> {
+                        _addPlayer.value = addPlayer.value.copy(
+                            Loading = false,
+                            TeamId = "",
+                            Position = "",
+                            Name = "",
+                            Resposibility = "",
+                            Paymnet = ""
+                        )
+                        _eventFlow.emit(UiEvent.eventSuccess)
+                    }
+                }
+            }.launchIn(this)
+        }
+
+
     }
 
     fun submit() {
@@ -85,7 +148,8 @@ class AddPlayerViewModel @Inject constructor(
                         Position = _addPlayer.value.Position,
                         Name = _addPlayer.value.Name,
                         Resposibility = "",
-                        Payment =  _addPlayer.value.Paymnet
+                        Payment =  _addPlayer.value.Paymnet,
+                        DocId = null
 
                     )
                 ).onEach {
@@ -104,8 +168,10 @@ class AddPlayerViewModel @Inject constructor(
                                 TeamId = "",
                                 Position = "",
                                 Name = "",
-                                Resposibility = ""
+                                Resposibility = "",
+                                Paymnet = ""
                             )
+
                         }
                     }
 

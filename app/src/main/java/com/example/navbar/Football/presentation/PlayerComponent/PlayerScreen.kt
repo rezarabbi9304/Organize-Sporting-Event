@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,9 +18,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,16 +38,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.dentonstudio.rickandmorty.util.GifScreen
+import com.example.navbar.Football.domain.model.Player
+import com.example.navbar.Football.presentation.AddPlayerComponent.AddPlayerViewModel
+import com.example.navbar.Football.presentation.AddPlayerComponent.UiEvent
+import com.example.navbar.Football.presentation.CustomPlayerUpdateDialog
 import com.example.navbar.Football.presentation.PlayerComponent.PlayerItem
 import com.example.navbar.Football.presentation.PlayerComponent.PlayerViewModel
 import com.example.navbar.R
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayerScreen(
     navController : NavController,
-    viewModel:PlayerViewModel = hiltViewModel()
+    viewModel:PlayerViewModel = hiltViewModel(),
+    addPlayerViewModel: AddPlayerViewModel = hiltViewModel(),
 ) {
     val listState = rememberLazyListState()
     val offset by remember { derivedStateOf { listState.firstVisibleItemScrollOffset.toFloat() } }
@@ -58,6 +68,20 @@ fun PlayerScreen(
     // Calculating the size based on the scroll offset
     val imageSize: Dp = (maxSize - (offset / scaleFactor).dp).coerceIn(minSize, maxSize)
 
+    val isDialogShow = remember {
+        mutableStateOf(false);
+    }
+
+    LaunchedEffect(key1 = true) {
+        addPlayerViewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                UiEvent.eventSuccess -> {
+                    isDialogShow.value = false
+                    viewModel.getAllPlayer()
+                }
+            }
+        }
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -78,6 +102,12 @@ fun PlayerScreen(
                 contentScale = ContentScale.FillHeight,
 
                 )
+            
+            if(isDialogShow.value){
+                CustomPlayerUpdateDialog(onDismissed = {isDialogShow.value = false}) {
+                    
+                }
+            }
 
             LazyColumn(
                 state = listState,
@@ -90,13 +120,14 @@ fun PlayerScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
 
-                stickyHeader{    AsyncImage(model =viewModel.TeamPoster.value , contentDescription = "", modifier = Modifier
+                item{    AsyncImage(model =viewModel.TeamPoster.value , contentDescription = "", modifier = Modifier
                     .fillMaxWidth()
-                    .height(imageSize)
-
+                    .padding(top = 20.dp)
                     .clip(
                         RoundedCornerShape(15.dp)
                     )) }
+                
+                stickyHeader { Spacer(modifier = Modifier.height(20.dp)) }
                 item { if(viewModel.playerState.value.loading){
 
                     GifScreen()
@@ -104,7 +135,10 @@ fun PlayerScreen(
                 items(player.sortedBy {
                     it.Name
                 }){
-                    PlayerItem(it)
+                    PlayerItem(it, onClick = {
+                       isDialogShow.value = true;
+                        addPlayerViewModel.updatePlayerData(it)
+                    })
                 }
             }
         }

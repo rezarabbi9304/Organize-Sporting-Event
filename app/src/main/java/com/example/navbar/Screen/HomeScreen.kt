@@ -28,10 +28,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.dentonstudio.rickandmorty.util.GifScreen
+import com.example.navbar.Football.presentation.CustomPlayerUpdateDialog
 import com.example.navbar.Football.presentation.FootballViewModel
 import com.example.navbar.R
 import com.google.firebase.Firebase
@@ -57,6 +59,8 @@ fun HomeScreen(isTrue:Boolean,
         if(viewModel.state.value.loading){
             GifScreen()
         }
+
+
 
         Column(modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,

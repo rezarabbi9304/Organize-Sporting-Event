@@ -7,4 +7,5 @@ sealed class InputEvent(){
     data class EnterPayment(val value: String):InputEvent()
 
     object  addEvent:InputEvent()
+    object  updateEvent:InputEvent()
 }

@@ -11,6 +11,7 @@ data class AddPlayerState(
     val PositionError:String? =null,
     val Loading:Boolean = false,
     val Paymnet: String = "",
-    val PaymnetError: String?= null
+    val PaymnetError: String?= null,
+    val DocumentId:String?=null
 )
 

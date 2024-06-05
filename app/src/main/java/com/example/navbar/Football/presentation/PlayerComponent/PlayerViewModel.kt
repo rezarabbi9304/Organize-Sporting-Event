@@ -26,12 +26,14 @@ class PlayerViewModel @Inject constructor(
     val playerState = _playerState
     private val _TeamPoster = mutableStateOf("")
     val TeamPoster =_TeamPoster
+    val teamId  = mutableStateOf("02")
 
 
     init {
         savedStateHandle.get<Int>("TeamId")?.let {
             if(it!=-1){
-                getAllPlayer(it.toString())
+                teamId.value = it.toString()
+                getAllPlayer()
             }
         }
 
@@ -40,10 +42,10 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    fun getAllPlayer(teamId: String) {
+    fun getAllPlayer() {
 
         viewModelScope.launch {
-            useCase.getPlayer.invoke(teamId).onEach {
+            useCase.getPlayer.invoke(teamId.value).onEach {
                 when(it){
                     is Resource.Error -> {}
                     is Resource.Loading -> {

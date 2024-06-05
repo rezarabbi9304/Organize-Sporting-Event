@@ -99,9 +99,6 @@ class MainActivity : ComponentActivity() {
                             bottomBar = {
                                 BottomAppBar( containerColor = Color(0xFF375E3C),actions = {
                                     BottomNavBar(navController = navController)
-
-
-
                                 },
                                     floatingActionButton = {
                                         FabPosition.Center

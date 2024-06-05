@@ -60,7 +60,8 @@ class RepositoryImp(
                         Name = it.getString("Name")?:"Unknown",
                         Resposibility = it.getString("Responsibility"),
                         Position = it.getString("Position"),
-                        Payment = it.getString("Payment")
+                        Payment = it.getString("Payment"),
+                        DocId = it.id
                     )
                 }
 
@@ -76,6 +77,37 @@ class RepositoryImp(
                 message = "No Internet Connection"
             ))
         }
+    }
+
+    override suspend fun getAllPlayer(): Flow<Resource<List<Player>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val data  = db.collection("Player")
+                .get()
+                .await().documents.map {
+                    Player(
+                        TeamId = it.getString("TeamId")?:"-1",
+                        Name = it.getString("Name")?:"Unknown",
+                        Resposibility = it.getString("Responsibility"),
+                        Position = it.getString("Position"),
+                        Payment = it.getString("Payment"),
+                        DocId = it.id
+                    )
+                }
+
+            emit(Resource.Success(data))
+
+        }catch (Ex:HttpException){
+            emit(Resource.Error(
+                message = "Something Went Wrong"
+            ))
+
+        }catch (Ex:IOException){
+            emit(Resource.Error(
+                message = "No Internet Connection"
+            ))
+        }
+
     }
 
     override suspend fun addPlayer(player: Player): Flow<Resource<String>> = flow{
@@ -107,6 +139,33 @@ class RepositoryImp(
             ))
         }
 
+
+    }
+
+    override suspend fun update(player: Player): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        try {
+
+            val data = player.DocId?.let {
+                db.collection("Player").document(it)
+                    .update(
+                        mapOf(
+                            "Payment" to player.Payment,
+                            "Position" to player.Position,
+                        )
+
+                    )
+            }
+            emit(Resource.Success("Player Update Complete"))
+        }catch (ex:HttpException){
+            emit(Resource.Error(
+                message = "Something Went Wrong"
+            ))
+        }catch (Ex:IOException){
+            emit(Resource.Error(
+                message = "Something Went Wrong"
+            ))
+        }
 
     }
 }
