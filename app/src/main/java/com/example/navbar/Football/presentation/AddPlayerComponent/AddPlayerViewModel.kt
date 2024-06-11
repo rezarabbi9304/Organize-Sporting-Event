@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.dentonstudio.rickandmorty.util.Resource
 import com.example.navbar.Football.domain.model.Player
 import com.example.navbar.Football.domain.useCase.WrapperCaseClass
+import com.example.navbar.Football.presentation.TeamState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -25,6 +26,36 @@ class AddPlayerViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+    private val _state = mutableStateOf(TeamState())
+    val state = _state
+
+    init {
+        getTeam()
+    }
+
+    fun getTeam(){
+        viewModelScope.launch {
+            useCaseClass.getTeam.invoke().onEach {
+                when(it){
+                    is Resource.Error -> {}
+                    is Resource.Loading -> {
+                        _state.value = state.value.copy(
+                            loading = true
+                        )
+                    }
+                    is Resource.Success -> {
+                        _state.value = it.data?.let { it1 ->
+                            state.value.copy(
+                                teams = it1,
+                                loading = false
+                            )
+                        }!!
+                    }
+                }
+            }.launchIn(this)
+        }
+
+    }
 
 
     fun updatePlayerData(player:Player){

@@ -44,7 +44,9 @@ import com.example.navbar.Screen.HomeScreen
 import com.example.navbar.Football.presentation.PlayerComponent.PlayerScreen
 import com.example.navbar.Screen.ScreenRoute
 import com.example.navbar.component.BottomNavBar
+import com.example.navbar.onBoarding.onBoardingScreen
 import com.example.navbar.ui.theme.NavBarTheme
+import com.example.navbar.util.onBoardingUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 import kotlinx.coroutines.launch
@@ -52,10 +54,14 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private  val onBoarding by lazy { onBoardingUtils(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val activity = this as Activity
+
+
         setContent {
             NavBarTheme {
                 val navController = rememberNavController()
@@ -87,12 +93,11 @@ class MainActivity : ComponentActivity() {
                       }
                     }
                 }) {
-
-                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        Greeting(
-                            name = "Android",
-                            modifier = Modifier.padding(innerPadding)
-                        )
+                    if(onBoarding.isOnBoardingComplete()){
+                        onBoardingScreen{
+                            println("Finished")
+                        }
+                    }else{
                         Scaffold(
 
 
@@ -151,8 +156,13 @@ class MainActivity : ComponentActivity() {
                                     AccountingScreen()
                                 }
                             }
+
+
                         }
                     }
+
+
+
                 }
 
             }

@@ -2,6 +2,7 @@ package com.example.navbar.Football.presentation.AddPlayerComponent
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -30,10 +37,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.dentonstudio.rickandmorty.util.GifScreen
 import com.example.navbar.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScreen(
     viewModel: AddPlayerViewModel = hiltViewModel()
 ) {
+
+    var isDropDown = remember {
+        mutableStateOf(false)
+    }
+
+    var selectedValue = remember {
+        mutableStateOf("")
+    }
 
     Box(
         modifier = Modifier
@@ -88,15 +104,32 @@ fun AddScreen(
 
                 }
 
-                TextField(
-                    value = viewModel.addPlayer.value.TeamId,
-                    onValueChange = { viewModel.eventListener(InputEvent.EnteredTeam(it)) },
-                    label = { Text(text = "Select Team") })
-                viewModel.addPlayer.value.TeamIdError?.let {
-                    Text(
-                        text = it,
-                        style = TextStyle(color = Color.White)
-                    )
+
+                ExposedDropdownMenuBox(
+                expanded = isDropDown.value, onExpandedChange = {
+                        println(it)
+                        if(isDropDown.value){
+                            isDropDown.value = false
+                        }else{
+                            isDropDown.value=it
+                        }
+                  },
+                    ) {
+                    TextField( modifier = Modifier.menuAnchor(), value =selectedValue.value, onValueChange = {},
+                        label = { Text(text = "Select Team") },
+                     trailingIcon = {ExposedDropdownMenuDefaults.TrailingIcon(expanded =  isDropDown.value)},
+                        readOnly = true)
+                    ExposedDropdownMenu(expanded =  isDropDown.value, onDismissRequest = {  isDropDown.value = false}) {
+
+                        for (team in viewModel.state.value.teams){
+                            DropdownMenuItem(
+                                text = { Text(text = team.Name) }, onClick = {selectedValue.value =team.Name
+                                    isDropDown.value = false
+                                    viewModel.eventListener(InputEvent.EnteredTeam(team.TeamId))                                           },
+                            )
+                        }
+
+                    }
                 }
 
                 TextField(

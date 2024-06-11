@@ -89,7 +89,7 @@ fun CustomPlayerUpdateDialog (
                     TextField(
                         value = viewModel.addPlayer.value.TeamId,
                         onValueChange = { viewModel.eventListener(InputEvent.EnteredTeam(it)) },
-                        label = { Text(text = "Select Team") },
+                        label = { Text(text = "Team") },
                         enabled = false)
                     viewModel.addPlayer.value.TeamIdError?.let {
                         Text(
