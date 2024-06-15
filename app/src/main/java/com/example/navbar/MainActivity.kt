@@ -1,23 +1,20 @@
 package com.example.navbar
 
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -31,8 +28,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -48,6 +47,7 @@ import com.example.navbar.onBoarding.onBoardingScreen
 import com.example.navbar.ui.theme.NavBarTheme
 import com.example.navbar.util.onBoardingUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 
 import kotlinx.coroutines.launch
 
@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        installSplashScreen()
         val activity = this as Activity
 
 
@@ -93,72 +94,29 @@ class MainActivity : ComponentActivity() {
                       }
                     }
                 }) {
-                    if(onBoarding.isOnBoardingComplete()){
-                        onBoardingScreen{
-                            println("Finished")
-                        }
+                    if(!onBoarding.isOnBoardingComplete()){
+                        onBoardingScreen(
+                          onFinish = {  onBoarding.setOnBoardingComplete()
+                          scope.launch {
+                              setContent {
+                                  Opening(
+                                      navController = navController,
+                                      drawerState,
+                                      activity,
+                                      scope
+                                  )
+                              }
+
+                          }
+                          }
+                        )
                     }else{
-                        Scaffold(
-
-
-                            bottomBar = {
-                                BottomAppBar( containerColor = Color(0xFF375E3C),actions = {
-                                    BottomNavBar(navController = navController)
-                                },
-                                    floatingActionButton = {
-                                        FabPosition.Center
-                                        FloatingActionButton(onClick ={
-                                            scope.launch {
-                                                drawerState.apply {
-                                                    if (isClosed) open() else close()
-                                                }
-                                            }
-                                        }) {
-                                            Icon(imageVector = Icons.Default.Add, contentDescription = "add")
-
-                                        }
-                                    }
-
-                                )
-                            }
-                        ) { paddingValues ->
-                            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                            NavHost(  modifier = Modifier.padding(paddingValues),navController = navController, startDestination = ScreenRoute.Home.route){
-
-                                composable(route = ScreenRoute.Home.route){
-                                    HomeScreen(true, navController = navController)
-                                }
-                                composable(route = ScreenRoute.Job.route+ "?TeamId={TeamId}"+"?poster={poster}",
-                                    arguments = listOf(
-                                        navArgument(
-                                            name = "TeamId",
-                                        ){
-                                            type = NavType.IntType
-                                            defaultValue = -1
-                                        },
-                                        navArgument(
-                                            name = "poster",
-                                        ){
-                                            type = NavType.StringType
-                                            defaultValue = ""
-                                        }
-                                    )
-                                ){
-                                    PlayerScreen(
-                                        navController = navController
-                                    )
-                                }
-                                composable(route = ScreenRoute.AddNew.route){
-                                    AddScreen()
-                                }
-
-                                composable(route = ScreenRoute.Account.route){
-                                    AccountingScreen()
-                                }
-                            }
-
-
-                        }
+                      Opening(
+                          navController = navController,
+                          drawerState,
+                          activity,
+                          scope
+                      )
                     }
 
 
@@ -167,6 +125,76 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+}
+@Composable
+fun Opening(
+    navController: NavHostController,
+    drawerState: DrawerState,
+    activity: Activity,
+    scope: CoroutineScope
+){
+
+    Scaffold(
+
+
+        bottomBar = {
+            BottomAppBar( containerColor = Color(0xFF375E3C),actions = {
+                BottomNavBar(navController = navController)
+            },
+                floatingActionButton = {
+                    FabPosition.Center
+                    FloatingActionButton(onClick ={
+                        scope.launch {
+                            drawerState.apply {
+                                if (isClosed) open() else close()
+                            }
+                        }
+                    }) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "add")
+
+                    }
+                }
+
+            )
+        }
+    ) { paddingValues ->
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        NavHost(  modifier = Modifier.padding(paddingValues),navController = navController, startDestination = ScreenRoute.Home.route){
+
+            composable(route = ScreenRoute.Home.route){
+                HomeScreen(true, navController = navController)
+            }
+            composable(route = ScreenRoute.Job.route+ "?TeamId={TeamId}"+"?poster={poster}",
+                arguments = listOf(
+                    navArgument(
+                        name = "TeamId",
+                    ){
+                        type = NavType.IntType
+                        defaultValue = -1
+                    },
+                    navArgument(
+                        name = "poster",
+                    ){
+                        type = NavType.StringType
+                        defaultValue = ""
+                    }
+                )
+            ){
+                PlayerScreen(
+                    navController = navController
+                )
+            }
+            composable(route = ScreenRoute.AddNew.route){
+                AddScreen()
+            }
+
+            composable(route = ScreenRoute.Account.route){
+                AccountingScreen()
+            }
+        }
+
+
     }
 }
 

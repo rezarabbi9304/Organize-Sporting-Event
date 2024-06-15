@@ -8,7 +8,7 @@ class onBoardingUtils( val context: Context) {
     fun isOnBoardingComplete():Boolean{
 
         return context.getSharedPreferences("onboarding",Context.MODE_PRIVATE)
-            .getBoolean("complete",true)
+            .getBoolean("complete",false)
     }
 
     fun setOnBoardingComplete(){

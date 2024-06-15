@@ -11,20 +11,20 @@ sealed class onBoardingModel (
     val Description:String
 ){
     data object FirstPage:onBoardingModel(
-        Image = R.drawable.first_page_image,
-        Title = "Create The Ultimate Team",
-        Description = "we can achieve anything with Team Work"
+        Image = R.drawable.first_page,
+        Title = "Create Your Dream Team",
+        Description = "A good Team is all you ever need"
     )
     data object SecondPage:onBoardingModel(
-        Image = 0,
+        Image = R.drawable.second_page,
         Title = "Add Your Team Mate",
-        Description = "we can achieve anything with Team Work"
+        Description = "Gather around your trusted warrior"
     )
 
     data object ThirdPage:onBoardingModel(
-        Image = 0,
+        Image =R.drawable.third_page,
         Title = "Ready For some action",
-        Description = "we can achieve anything with Team Work"
+        Description = "Play fifa smoke Shisha"
     )
 }
 
